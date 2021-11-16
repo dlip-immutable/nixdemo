@@ -5,4 +5,5 @@ services:
     build: .
     volumes:
       - .:/work
+      - ./nixpkgs:/root/.config/nixpkgs
     working_dir: /work

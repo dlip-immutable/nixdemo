@@ -5,14 +5,14 @@
 
 - Install Docker
 
-```
+```sh
 docker-compose up -d
 docker-compose exec shell sh
 ```
 
 ## Nix Install Basics
 
-```
+```sh
 # Install hello
 nix-env -iA nixpkgs.hello
 hello
@@ -22,7 +22,7 @@ nix-env -e hello
 
 ## Nix Language
 
-```
+```sh
 # Start REPL
 nix repl
 
@@ -30,7 +30,7 @@ nix repl
 
 ## Install Home Manager
 
-```
+```sh
 nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
 nix-channel --update
 nix-shell '<home-manager>' -A install
@@ -39,15 +39,20 @@ home-manager switch
 
 ## Basic Programs
 
-```
+```sh
   vi ~/.config/nixpkgs/home.nix
-  # Add
+  # Add cowsay package
+```
 
+```nix
   home.packages = with pkgs; [
     cowsay
   ];
+```
 
+```sh
   home-manager switch
+  cowsay hello
 ```
 
 I have also mounted the the `~/.config/nixpkgs` folder to `nixpkgs` in this repository for convienience
@@ -60,7 +65,7 @@ Modules are a way to install and configure programs using nix language. The best
 
 https://github.com/nix-community/home-manager/blob/master/modules/programs/git.nix
 
-```
+```nix
   options = {
     programs.git = {
       enable = mkEnableOption "Git";
@@ -87,7 +92,7 @@ https://github.com/nix-community/home-manager/blob/master/modules/programs/git.n
 
 Example config:
 
-```
+```nix
   programs.git = {
     enable = true;
 

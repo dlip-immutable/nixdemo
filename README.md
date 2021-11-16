@@ -20,15 +20,75 @@ hello
 nix-env -e hello
 ```
 
+## Nix Store
+
+Everything in nix is built in an environment with no mutable inputs such as direct network access or system clock in order to ensure built packages are reproducable. 
+The output is written to `/nix/store` and nix-env simply symlinks the correct version to your `~/.nix-profile/bin` folder which was added to your path when you install nix.
+
+```sh
+$ which hello
+/root/.nix-profile/bin/hello
+$ ls -la /root/.nix-profile/bin/hello
+lrwxrwxrwx    1 root     root            64 Jan  1  1970 /root/.nix-profile/bin/hello -> /nix/store/ssccr9khjprx3722cqcjikngzffjl4xf-hello-2.10/bin/hello
+```
+
 ## Nix Language
 
 ```sh
 # Start REPL
 nix repl
-
 ```
 
-## Install Home Manager
+### Variables
+
+```
+nix-repl> foo = "strval"
+nix-repl> "$foo"
+"$foo"
+```
+
+### Lists
+
+```
+nix-repl> [ 2 "foo" true (2+3) ]
+[ 2 "foo" true 5 ]
+```
+
+### Attribute Sets
+
+```
+nix-repl> s = { foo = "bar"; a-b = "baz"; "123" = "num"; }
+nix-repl> s
+{ "123" = "num"; a-b = "baz"; foo = "bar"; }
+nix-repl> s.a-b
+"baz"
+nix-repl> s."123"
+"num"
+```
+
+### Functions
+
+```
+nix-repl> double = x: x*2
+nix-repl> double
+«lambda»
+nix-repl> double 3
+6
+
+nix-repl> mul = { a, b ? 2 }: a*b
+nix-repl> mul { a = 3; }
+6
+nix-repl> mul { a = 3; b = 4; }
+12
+```
+
+Read more [Nix Pills](https://nixos.org/guides/nix-pills/basics-of-language.html)
+
+## Home Manager
+
+Installing programs adhoc as in the above example is not a great improvement over using `apt-get` or `brew`.
+In order to ensure you can synchronise configurations across machines your want to be able to commit it to git.
+Home Manager makes it easy to install and configure your home directory and programs using a `home.nix` file.
 
 ```sh
 nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
@@ -37,7 +97,7 @@ nix-shell '<home-manager>' -A install
 home-manager switch
 ```
 
-## Basic Programs
+## Installing Basic Programs
 
 ```sh
   vi ~/.config/nixpkgs/home.nix

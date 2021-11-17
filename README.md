@@ -185,3 +185,25 @@ https://github.com/nix-community/home-manager/blob/master/modules/programs/zsh.n
     };
   };
 ```
+
+#### Creating Files
+
+```
+  home.file = {
+    ".config/vim/vimrc".text = ''
+      set wrap
+      set textwidth=79
+      set formatoptions=tcqrn1
+      set tabstop=2
+      set shiftwidth=2
+      set softtabstop=2
+      set expandtab
+      set noshiftround
+    '';
+  };
+```
+## Future Topics
+
+- Flakes
+- Creating our own packages
+
